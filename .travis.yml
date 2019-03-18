@@ -26,7 +26,3 @@ script:
 
    # run tests with the race detector
   - go test -v -cover -race -coverprofile=all.coverprofile ./...
-
-  # run tests
-  - $HOME/gopath/bin/gover
-  - $HOME/gopath/bin/goveralls -coverprofile=gover.coverprofile -service travis-ci
