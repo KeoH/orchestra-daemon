@@ -1,0 +1,34 @@
+language: go
+sudo: false
+go:
+  - 1.11.x
+  - 1.12.x
+  - tip
+
+# env:
+#   - GO111MODULE=on
+
+os:
+  - linux
+  - osx
+
+before_install:
+  - go get -u -v golang.org/x/tools/cmd/cover
+  - go get -u -v github.com/modocache/gover
+  - go get -u -v github.com/mattn/goveralls
+  - go get -v ./cmd/...
+
+script:
+    # build test for supported platforms
+  - GOOS=linux go build -o /dev/null ./cmd/...
+  - GOOS=darwin go build -o /dev/null ./cmd/...
+  - GOOS=freebsd go build -o /dev/null ./cmd/...
+  - GOOS=windows go build -o /dev/null ./cmd/...
+  - GOARCH=386 go build -o /dev/null ./cmd/...
+
+   # run tests with the race detector
+  - go test -v -cover -race -coverprofile=all.coverprofile ./...
+
+  # run tests
+  - $HOME/gopath/bin/gover
+  - $HOME/gopath/bin/goveralls -coverprofile=gover.coverprofile -service travis-ci
