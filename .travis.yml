@@ -10,16 +10,7 @@ os:
   - linux
   - osx
 
-before_install:
-  - go get -v ./cmd/...
-
 script:
-    # build test for supported platforms
-  - GOOS=linux go build
-  - GOOS=darwin go build
-  - GOOS=freebsd go build
-  - GOOS=windows go build
-  - GOARCH=386 go build
 
   # run tests on a standard platform
   - go test -v ./...
