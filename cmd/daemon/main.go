@@ -1,36 +1,24 @@
 package main
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
+	"github.com/savsgio/atreugo/v7"
 )
 
-type Image struct {
-	Name string
-}
-
-type Data struct {
-	Images []Image
-}
-
-func serializeJSON(data Data, response http.ResponseWriter, request *http.Request) {
-	js, err := json.Marshal(data)
-	if err != nil {
-		http.Error(response, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	response.Header().Set("Content-Type", "application/json")
-	response.Write(js)
-}
-
-func indexView(response http.ResponseWriter, request *http.Request) {
-	data := Data{[]Image{Image{"docker"}, Image{"mongodb"}}}
-	serializeJSON(data, response, request)
-}
-
 func main() {
-	http.HandleFunc("/", indexView)
-	fmt.Println("Serving on port 12001")
-	http.ListenAndServe(":12001", nil)
+
+	config := &atreugo.Config{
+		Host: "0.0.0.0",
+		Port: 12001,
+	}
+
+	server := atreugo.New(config)
+
+	server.Path("GET", "/", func(ctx *atreugo.RequestCtx) error {
+		return ctx.JSONResponse(atreugo.JSON{"Daemon": "Ok"})
+	})
+
+	err := server.ListenAndServe()
+	if err != nil {
+		panic(err)
+	}
 }
