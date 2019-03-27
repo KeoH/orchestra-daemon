@@ -1,4 +1,4 @@
-module github.com/orchestrapi/orchestra-daemon
+module github.com/orchestrapi/daemon
 
 go 1.12
 
